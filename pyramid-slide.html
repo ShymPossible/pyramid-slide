@@ -8,12 +8,13 @@
 
         <form>
             <label for="height"> How High? :</label>
-            <input type="range" name="height" min="1" max="20" step="1" onchange="updateTextInput(this.value);">
-            <input type="text" id="textInput" value="">
+            <input id="number" type="range" name="height" min="1" max="20" step="1" 
+            onchange="updateTextInput(this.value);" oninput="updateTextInput(this.value);"/>
+            <input type="text" id="textInput" value=""/>
         </form>
 
         <form>
-            <select name="Brick Type:" id="brick" onchange="updateBrickInput(this.value);">
+            <select name="Brick-Type:" id="brick" onchange="drawPyramid(document.getElementById('number').value);">
                 <option value="#">#</option>
                 <option value="%">%</option>
                 <option value="&">&</option>
@@ -25,16 +26,57 @@
 
         </div>
 
+        
         <script>
             function updateTextInput(val) {
             document.getElementById('textInput').value=val; 
             }
 
             function updateBrickInput(val) {
-            document.getElementById('brick').value=val;
+            var x = document.getElementById('brick').value=val;
             }
 
-  
+
+            var height = document.getElementById("textInput");
+
+
+            var yes = document.getElementById("number").onchange = function() {
+
+            heightVal = height.value;
+            finalHeight = parseInt(heightVal);
+
+            drawPyramid(finalHeight);
+
+            }
+
+            
+            function drawPyramid(height) {
+                document.getElementById("pyramid").innerHTML = "";
+
+                // for each row....
+                for (var row = 0; row < height; row++) {
+
+                    // figure out number of bricks and spaces
+                    var numBricks = row + 2;
+                    var numSpaces = height - row - 1;
+
+                    // build up a string for this row
+                    var rowStr = "";
+                    for (var i = 0; i < numSpaces; i++) {
+                        var spaceChar = "&nbsp"; // this is the HTML encoding for a space " "
+                        rowStr += spaceChar;
+                    }
+                    for (var i = 0; i < numBricks; i++) {
+                        var y = document.getElementById("brick").value;
+                        rowStr += y;
+                    }
+
+                    // make a <p> element for this row, and insert it into the #pyramid container
+                    rowElem = document.createElement("p");
+                    rowElem.innerHTML = rowStr;
+                    document.getElementById("pyramid").appendChild(rowElem);
+                }
+            }
         </script>
 
     </body>
